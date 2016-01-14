@@ -2,3 +2,7 @@
 name = "leak"
 version = "0.1.0"
 authors = ["Cody P Schafer <dev@codyps.com>"]
+license = "Apache-2.0 OR MIT"
+description = "Safely leak data from owned data structures"
+keywords = [ "leak", "rfc1233", "own" ]
+repository = "https://github.com/jmesmon/leak.git"
