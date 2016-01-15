@@ -17,7 +17,7 @@ use std::mem;
  * While it would be ideal to return a `&'a mut T`, we apparently can't do that due to limitations
  * in rust's borrow checker causing soundness issues. Details are in the RFC liked above.
  */
-trait Leak<T : ?Sized> {
+pub trait Leak<T : ?Sized> {
     fn leak<'a>(self) -> &'a T where T: 'a;
 }
 
@@ -83,5 +83,9 @@ mod test {
         use super::Leak;
 
         let v = Box::new(vec!["hi", "there"].into_boxed_slice());
+        {
+            let o = v.clone();
+            let _ : &'static _ = o.leak();
+        }
     }
 }
