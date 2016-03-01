@@ -82,10 +82,21 @@ mod test {
     fn leak_box() {
         use super::Leak;
 
-        let v = Box::new(vec!["hi", "there"].into_boxed_slice());
+        let v : Box<[&str]> = vec!["hi", "there"].into_boxed_slice();
         {
             let o = v.clone();
-            let _ : &'static _ = o.leak();
+            let _ : &'static [&str] = o.leak();
         }
+    }
+
+    #[test]
+    fn leak_nested() {
+        use super::Leak;
+
+        let v : Box<Vec<&str>> = Box::new(vec!["hi", "there"]);
+        let _ = {
+            let o = v.clone();
+            let _ : &'static [&str] = o.leak();
+        };
     }
 }
