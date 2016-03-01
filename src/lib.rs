@@ -57,14 +57,17 @@ mod test {
         use std::borrow::ToOwned;
 
         let v = "hi";
-        {
+        let leaked : &str = {
             let o = v.to_owned();
-            let _ : &str = o.leak();
-        }
-        {
+            o.leak()
+        };
+        assert_eq!(leaked, v);
+
+        let leaked : &'static str = {
             let o = v.to_owned();
-            let _ : &'static str = o.leak();
-        }
+            o.leak()
+        };
+        assert_eq!(leaked, v);
     }
 
     #[test]
@@ -72,10 +75,11 @@ mod test {
         use super::Leak;
 
         let v = vec![3, 5];
-        {
+        let leaked : &'static [u8] = {
             let o = v.clone();
-            let _ : &'static [u8] = o.leak();
-        }
+            o.leak()
+        };
+        assert_eq!(leaked, &*v);
     }
 
     #[test]
@@ -83,10 +87,11 @@ mod test {
         use super::Leak;
 
         let v : Box<[&str]> = vec!["hi", "there"].into_boxed_slice();
-        {
+        let leaked : &'static [&str] = {
             let o = v.clone();
-            let _ : &'static [&str] = o.leak();
-        }
+            o.leak()
+        };
+        assert_eq!(leaked, &*v);
     }
 
     #[test]
@@ -94,9 +99,10 @@ mod test {
         use super::Leak;
 
         let v : Box<Vec<&str>> = Box::new(vec!["hi", "there"]);
-        let _ = {
+        let leaked : &'static [&str] = {
             let o = v.clone();
-            let _ : &'static [&str] = o.leak();
+            o.leak()
         };
+        assert_eq!(leaked, &**v);
     }
 }
