@@ -71,10 +71,35 @@ mod test {
     }
 
     #[test]
+    fn leak_empty_str() {
+        use super::Leak;
+        use std::borrow::ToOwned;
+
+        let v = "";
+        let leaked : &'static str = {
+            let o = v.to_owned();
+            o.leak()
+        };
+        assert_eq!(leaked, v);
+    }
+
+    #[test]
     fn leak_vec() {
         use super::Leak;
 
         let v = vec![3, 5];
+        let leaked : &'static [u8] = {
+            let o = v.clone();
+            o.leak()
+        };
+        assert_eq!(leaked, &*v);
+    }
+
+    #[test]
+    fn leak_empty_vec() {
+        use super::Leak;
+
+        let v = vec![];
         let leaked : &'static [u8] = {
             let o = v.clone();
             o.leak()
