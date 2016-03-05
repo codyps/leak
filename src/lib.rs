@@ -1,11 +1,11 @@
 use std::mem;
 
 /**
- * Leak a piece of data by never calling it's desctructor
+ * Leak a piece of data by never calling its destructor
  *
  * Useful for things that are going to be used for the life of the program, but aren't technically
  * static (because they are created in response to arguments, environment, or other
- * configuration/data read at program start.
+ * configuration/data read at program start).
  *
  * This is a modified version of the proposed rfc: https://github.com/rust-lang/rfcs/pull/1233
  *
@@ -57,14 +57,30 @@ mod test {
         use std::borrow::ToOwned;
 
         let v = "hi";
-        {
+        let leaked : &str = {
             let o = v.to_owned();
-            let _ : &str = o.leak();
-        }
-        {
+            o.leak()
+        };
+        assert_eq!(leaked, v);
+
+        let leaked : &'static str = {
             let o = v.to_owned();
-            let _ : &'static str = o.leak();
-        }
+            o.leak()
+        };
+        assert_eq!(leaked, v);
+    }
+
+    #[test]
+    fn leak_empty_str() {
+        use super::Leak;
+        use std::borrow::ToOwned;
+
+        let v = "";
+        let leaked : &'static str = {
+            let o = v.to_owned();
+            o.leak()
+        };
+        assert_eq!(leaked, v);
     }
 
     #[test]
@@ -72,20 +88,46 @@ mod test {
         use super::Leak;
 
         let v = vec![3, 5];
-        {
+        let leaked : &'static [u8] = {
             let o = v.clone();
-            let _ : &'static [u8] = o.leak();
-        }
+            o.leak()
+        };
+        assert_eq!(leaked, &*v);
+    }
+
+    #[test]
+    fn leak_empty_vec() {
+        use super::Leak;
+
+        let v = vec![];
+        let leaked : &'static [u8] = {
+            let o = v.clone();
+            o.leak()
+        };
+        assert_eq!(leaked, &*v);
     }
 
     #[test]
     fn leak_box() {
         use super::Leak;
 
-        let v = Box::new(vec!["hi", "there"].into_boxed_slice());
-        {
+        let v : Box<[&str]> = vec!["hi", "there"].into_boxed_slice();
+        let leaked : &'static [&str] = {
             let o = v.clone();
-            let _ : &'static _ = o.leak();
-        }
+            o.leak()
+        };
+        assert_eq!(leaked, &*v);
+    }
+
+    #[test]
+    fn leak_nested() {
+        use super::Leak;
+
+        let v : Box<Vec<&str>> = Box::new(vec!["hi", "there"]);
+        let leaked : &'static [&str] = {
+            let o = v.clone();
+            o.leak()
+        };
+        assert_eq!(leaked, &**v);
     }
 }
