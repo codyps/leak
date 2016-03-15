@@ -1,4 +1,4 @@
-* Leak a piece of data by never calling its destructor
+# Leak a piece of data by never calling its destructor
 
 Useful for things that are going to be used for the life of the program, but aren't technically
 static (because they are created in response to arguments, environment, or other
