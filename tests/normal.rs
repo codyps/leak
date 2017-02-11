@@ -70,3 +70,11 @@ fn leak_nested() {
     };
     assert_eq!(leaked, &**v);
 }
+
+#[test]
+fn leak_mut() {
+    let v = vec![1, 3, 4];
+    let leaked: &'static mut [u8] = v.leak();
+    leaked[1] = 5;
+    assert_eq!(leaked, &[1,5,4])
+}
