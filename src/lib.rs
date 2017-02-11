@@ -18,11 +18,11 @@ use std::mem;
  * in rust's borrow checker causing soundness issues. Details are in the RFC linked above.
  */
 pub trait Leak<T : ?Sized> {
-    fn leak<'a>(self) -> &'a T where T: 'a;
+    fn leak<'a>(self) -> &'a mut T where T: 'a;
 }
 
 impl<T : ?Sized> Leak<T> for Box<T> {
-    fn leak<'a>(self) -> &'a T where T: 'a {
+    fn leak<'a>(self) -> &'a mut T where T: 'a {
         let r = Self::into_raw(self);
         unsafe { &mut *r }
     }
@@ -34,7 +34,7 @@ impl<T : ?Sized> Leak<T> for Box<T> {
  */
 
 impl Leak<str> for String {
-    fn leak<'a>(mut self) -> &'a str where Self: 'a {
+    fn leak<'a>(mut self) -> &'a mut str where Self: 'a {
         let r: *mut str = &mut self[..];
         mem::forget(self);
         unsafe { &mut *r }
@@ -42,7 +42,7 @@ impl Leak<str> for String {
 }
 
 impl<T> Leak<[T]> for Vec<T> {
-    fn leak<'a>(mut self) -> &'a [T] where [T]: 'a {
+    fn leak<'a>(mut self) -> &'a mut [T] where [T]: 'a {
         let r: *mut [T] = &mut self[..];
         mem::forget(self);
         unsafe { &mut *r }
