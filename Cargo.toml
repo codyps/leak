@@ -7,7 +7,7 @@ description = "Safely leak data from owned data structures"
 keywords = [ "leak", "rfc1233", "own" ]
 documentation = "https://docs.rs/leak/0.2.0"
 repository = "https://github.com/jmesmon/leak.git"
-include = [ "Cargo.toml", "src/*.rs", "README.md" ]
+include = [ "Cargo.toml", "src/*.rs", "README.md", "tests/*.rs" ]
 
 [dev-dependencies]
 compiletest_rs = "*"
