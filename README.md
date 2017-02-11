@@ -7,8 +7,9 @@ configuration/data read at program start).
 This is a modified version of the proposed rfc: https://github.com/rust-lang/rfcs/pull/1233
 
 Notable changes:
+
 - for user convenience, leak() is a non-static method
 - Return `&T` instead of `&mut T`
 
 While it would be ideal to return a `&'a mut T`, we apparently can't do that due to limitations
-in rust's borrow checker causing soundness issues. Details are in the RFC liked above.
+in rust's borrow checker causing soundness issues. Details are in the RFC linked above.
