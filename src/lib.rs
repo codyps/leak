@@ -11,11 +11,7 @@ use std::mem;
  *
  * Notable changes:
  *
- *  - for user convenience, leak() is a non-static method
- *  - Return `&T` instead of `&mut T`
- *
- * While it would be ideal to return a `&'a mut T`, we apparently can't do that due to limitations
- * in rust's borrow checker causing soundness issues. Details are in the RFC linked above.
+ *  - for convenience, leak() is a non-static method
  */
 pub trait Leak<T : ?Sized> {
     fn leak<'a>(self) -> &'a mut T where T: 'a;

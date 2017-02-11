@@ -8,8 +8,4 @@ This is a modified version of the proposed rfc: https://github.com/rust-lang/rfc
 
 Notable changes:
 
-- for user convenience, leak() is a non-static method
-- Return `&T` instead of `&mut T`
-
-While it would be ideal to return a `&'a mut T`, we apparently can't do that due to limitations
-in rust's borrow checker causing soundness issues. Details are in the RFC linked above.
+- for convenience, leak() is a non-static method
