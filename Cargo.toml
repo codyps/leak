@@ -8,3 +8,9 @@ keywords = [ "leak", "rfc1233", "own" ]
 documentation = "https://docs.rs/leak/0.2.0"
 repository = "https://github.com/jmesmon/leak.git"
 include = [ "Cargo.toml", "src/*.rs", "README.md", "tests/*.rs" ]
+
+[features]
+unstable = [ "compiletest_rs" ]
+
+[dependencies]
+compiletest_rs = { version = "*", optional = true }
