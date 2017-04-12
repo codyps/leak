@@ -1,3 +1,17 @@
+
+#![cfg_attr(not(feature = "std"), feature(collections))]
+#![cfg_attr(not(feature = "std"), no_std)]
+#[cfg(not(feature = "std"))]
+extern crate collections;
+#[cfg(not(feature = "std"))]
+use core::mem;
+#[cfg(not(feature = "std"))]
+use collections::{String, Vec};
+#[cfg(not(feature = "std"))]
+use collections::boxed::Box;
+
+
+#[cfg(feature = "std")]
 use std::mem;
 
 /**
