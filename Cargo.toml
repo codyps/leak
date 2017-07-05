@@ -13,5 +13,6 @@ include = [ "Cargo.toml", "src/*.rs", "README.md", "tests/*.rs" ]
 std = []
 default = ["std"]
 
-[dev-dependencies]
-compiletest_rs = "*"
+[dependencies]
+# This is really a dev-dependencie, but those cannot currently be optional.
+compiletest_rs = { optional = true, version = "*" }
