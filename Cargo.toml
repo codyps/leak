@@ -10,7 +10,9 @@ repository = "https://github.com/jmesmon/leak.git"
 include = [ "Cargo.toml", "src/*.rs", "README.md", "tests/*.rs" ]
 
 [features]
-unstable = [ "compiletest_rs" ]
+std = []
+default = ["std"]
 
 [dependencies]
-compiletest_rs = { version = "*", optional = true }
+# This is really a dev-dependencie, but those cannot currently be optional.
+compiletest_rs = { optional = true, version = "*" }
